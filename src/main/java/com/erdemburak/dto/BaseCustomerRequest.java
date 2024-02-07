@@ -9,6 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateCustomerRequest extends BaseCustomerRequest{
-    private String id;
+public class BaseCustomerRequest {
+    private String name;
+    private Integer dateOfBirth;
+    private CityDto city;
+    private String address;
 }
