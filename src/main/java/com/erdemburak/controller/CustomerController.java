@@ -2,6 +2,7 @@ package com.erdemburak.controller;
 
 import com.erdemburak.dto.CreateCustomerRequest;
 import com.erdemburak.dto.CustomerDto;
+import com.erdemburak.dto.UpdateCustomerRequest;
 import com.erdemburak.service.CustomerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,5 +29,21 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getAllCustomers());
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<CustomerDto> getCustomerById(@PathVariable String id){
+        return ResponseEntity.ok(customerService.getCustomerById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCustomer(@PathVariable String id){
+        customerService.deleteCustomer(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CustomerDto> updateCustomer(@PathVariable String id,
+                                                      @RequestBody UpdateCustomerRequest customerRequest){
+        return ResponseEntity.ok(customerService.updateCustomer(id,customerRequest));
+    }
 
 }
