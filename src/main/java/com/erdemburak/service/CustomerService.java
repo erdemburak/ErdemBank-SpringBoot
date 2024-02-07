@@ -1,9 +1,6 @@
 package com.erdemburak.service;
 
-import com.erdemburak.dto.CityDto;
-import com.erdemburak.dto.CreateCustomerRequest;
-import com.erdemburak.dto.CustomerDto;
-import com.erdemburak.dto.CustomerDtoConverter;
+import com.erdemburak.dto.*;
 import com.erdemburak.model.City;
 import com.erdemburak.model.Customer;
 import com.erdemburak.repository.CustomerRepository;
@@ -11,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -46,5 +44,29 @@ public class CustomerService {
             customerDtoList.add(customerDtoConverter.convert(customer));
         }
         return customerDtoList;
+    }
+
+    public CustomerDto getCustomerById(String id) {
+        Optional<Customer> customerOptional = customerRepository.findById(id);
+
+        return customerOptional.map(customerDtoConverter::convert).orElse(new CustomerDto());
+    }
+
+    public void deleteCustomer(String id) {
+        customerRepository.deleteById(id);
+    }
+
+    public CustomerDto updateCustomer(String id, UpdateCustomerRequest customerRequest) {
+        Optional<Customer> customerOptional = customerRepository.findById(id);
+
+        customerOptional.ifPresent(customer -> {
+            customer.setName(customerRequest.getName());
+            customer.setCity(City.valueOf(customerRequest.getCity().name()));
+            customer.setDateOfBirth(customerRequest.getDateOfBirth());
+            customer.setAddress(customerRequest.getAddress());
+
+            customerRepository.save(customer);
+        });
+        return customerOptional.map(customerDtoConverter::convert).orElse(new CustomerDto());
     }
 }
