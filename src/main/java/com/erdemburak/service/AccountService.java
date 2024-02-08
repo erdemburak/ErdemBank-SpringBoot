@@ -30,8 +30,8 @@ public class AccountService {
 
     public AccountDto createAccount(CreateAccountRequest createAccountRequest){
         Customer customer = customerService.getCustomerById(createAccountRequest.getCustomerId());
-        if(Objects.equals(customer.getId(), "") || customer.getId() == null){
-            return AccountDto.builder().build();
+        if(customer.getId() == null || Objects.equals(customer.getId().trim(), "")){
+            throw new RuntimeException("Customer Not Found!");
         }
         Account account = Account.builder()
                 .id(createAccountRequest.getId())
